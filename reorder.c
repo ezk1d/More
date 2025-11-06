@@ -41,7 +41,7 @@ static struct listnode* reverse(struct listnode* node) {
 static struct listnode* merge(struct listnode* node1, struct listnode* node2) {
     struct listnode head = {0};
     struct listnode* itr = &head;
-    while (node1 || node2) {
+    while (node1 && node2) {
         itr->next = node1;
         node1 = node1->next;
         itr = itr->next;
@@ -72,8 +72,10 @@ static void free_node(struct listnode** node) {
 }
 
 void free_list(struct listnode* node) {
-    while (node) {
-        free_node(&node);
-	node = node->next;
+    struct listnode *itr = node;
+    while (itr) {
+        struct listnode *next = itr->next;
+        free_node(&itr);
+	    itr = next;
     }
 }
